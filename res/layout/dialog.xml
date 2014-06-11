@@ -1,0 +1,23 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
+
+   
+
+        <TextView
+            android:id="@+id/folderPath"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/default_path" />
+
+        <EditText
+            android:id="@+id/filePath"
+            android:layout_width="118dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="@string/default_filename"
+            android:textStyle="bold" />
+  
+
+</LinearLayout>

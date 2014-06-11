@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">EasyPdfMerge</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="default_path">/storage/sdcard0/MergedFiles/</string>
+    <string name="default_filename">Merged.pdf</string>
+    <string name="merge_files">Merge Files</string>
+    <string name="split_file">Split File</string>
+    <string name="split_filePath">Split.pdf</string>
+    <string name="from">From :</string>
+    <string name="to">To :</string>
+
+</resources>
