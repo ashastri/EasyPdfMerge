@@ -119,7 +119,6 @@ public class Split extends Fragment implements OnClickListener {
 	    				try {
 	    					output = new FileOutputStream("/storage/sdcard0/MergedFiles/"+ fileName);
 	    				} catch (FileNotFoundException e) {
-	    					// TODO Auto-generated catch block
 	    					e.printStackTrace();
 	    				}
 	    				int fromPageNumber = Integer.parseInt(fromPage.getText().toString());
@@ -172,7 +171,7 @@ public class Split extends Fragment implements OnClickListener {
 		testIntent.setType("application/pdf");
 		List list = packageManager.queryIntentActivities(testIntent,
 				PackageManager.MATCH_DEFAULT_ONLY);
-		if (list.size() > 0) { // && f1[(int) id].isFile()) {
+		if (list.size() > 0) { 
 			Intent intent = new Intent();
 			intent.setAction(Intent.ACTION_VIEW);
 			File pdffile = new File(flLst.get((int) id).toString());

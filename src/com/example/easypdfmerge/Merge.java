@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -20,9 +21,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,7 +32,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -54,10 +52,10 @@ public class Merge extends Fragment implements OnClickListener {
 	static ProgressDialog progressBar;
 	View mListView;
 	File[] fileArr = null;
-	List<File> flLst = null;
+	List<File> fileList = null;
 	String[] pdflist;
 	List<File> selectedFiles = new ArrayList<File>();
-	CheckedTextView ct1 = null;
+	CheckedTextView checkedFile = null;
 	EditText eTextView;
 	String fileName = "";
 	List<InputStream> filesToMerge = null;
@@ -74,28 +72,27 @@ public class Merge extends Fragment implements OnClickListener {
 		fileNameList = getFileListfromSDCard();
 		pdflist = new String[fileNameList.size()];
 		for (int i = 0; i < fileNameList.size(); i++) {
-			pdflist[i] = fileNameList.get(i).getName().toUpperCase();
+			pdflist[i] = fileNameList.get(i).getName().toUpperCase(Locale.US);
 		}
-		final ArrayAdapter<String> arrayAdapterList1 = new ArrayAdapter<String>(
+		final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
 				getActivity(),
 				android.R.layout.simple_list_item_multiple_choice, pdflist);
-		((ListView) mListView).setAdapter(arrayAdapterList1);
+		((ListView) mListView).setAdapter(arrayAdapter);
 		((ListView) mListView).setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-
 		((ListView) mListView)
 				.setOnItemClickListener(new OnItemClickListener() {
 					public void onItemClick(AdapterView<?> arg0, View arg1,
 							int arg2, long arg3) {
 
 						pos.add(String.valueOf(arg2));
-						selectedFiles.add(flLst.get(arg2));
+						selectedFiles.add(fileList.get(arg2));
 						CheckedTextView ctv = (CheckedTextView) arg1;
 						Toast.makeText(getActivity(),
 								ctv.getText().toString() + " : " + arg2,
 								Toast.LENGTH_SHORT).show();
 					}
 				});
-		ct1 = (CheckedTextView) view.findViewById(android.R.id.text1);
+		checkedFile = (CheckedTextView) view.findViewById(android.R.id.text1);
 		Button merge = (Button) view.findViewById(R.id.footer);
 		merge.setOnClickListener(new OnClickListener() {
 			@Override
@@ -185,9 +182,9 @@ public class Merge extends Fragment implements OnClickListener {
 
 										if (output1 == 0) {
 
-											ct1 = (CheckedTextView) view
+											checkedFile = (CheckedTextView) view
 													.findViewById(android.R.id.text1);
-											ct1.setChecked(false);
+											checkedFile.setChecked(false);
 											Toast.makeText(getActivity(),
 													"File Saved",
 													Toast.LENGTH_LONG).show();
@@ -213,7 +210,7 @@ public class Merge extends Fragment implements OnClickListener {
 	// Get list of pdf files from internal storage
 	private List<File> getFileListfromSDCard() {
 		String state = Environment.getExternalStorageState();
-		flLst = new ArrayList<File>();
+		fileList = new ArrayList<File>();
 		if (Environment.MEDIA_MOUNTED.equals(state) && file.isDirectory()) {
 			File[] fileArr = file.listFiles();
 			int length = fileArr.length;
@@ -226,14 +223,14 @@ public class Merge extends Fragment implements OnClickListener {
 							File f1 = filelist1[j];
 							if (f1.getName().contains(".pdf"))
 								// flLst.add(f1.getAbsolutePath());
-								flLst.add(f1);
+								fileList.add(f1);
 						}
 					}
 				}
 			}
 		}
 
-		return flLst;
+		return fileList;
 	}
 
 	// Open pdf file for viewing
@@ -247,7 +244,7 @@ public class Merge extends Fragment implements OnClickListener {
 		if (list.size() > 0) { // && f1[(int) id].isFile()) {
 			Intent intent = new Intent();
 			intent.setAction(Intent.ACTION_VIEW);
-			File pdffile = new File(flLst.get((int) id).toString());
+			File pdffile = new File(fileList.get((int) id).toString());
 			Uri uri = Uri.fromFile(pdffile);
 			intent.setDataAndType(uri, "application/pdf");
 			startActivity(intent);
@@ -350,11 +347,11 @@ public class Merge extends Fragment implements OnClickListener {
 	public void onClick(View v) {
 		if (v.getId() == R.id.footer) {
 			List<InputStream> pdfs = new ArrayList<InputStream>();
-			for (int i = 0; i < flLst.size(); i++) {
+			for (int i = 0; i < fileList.size(); i++) {
 				if (mIsChecked.get(i) != null) {
 					if (mIsChecked.get(i)) {
 						try {
-							pdfs.add(new FileInputStream(flLst.get((int) i)
+							pdfs.add(new FileInputStream(fileList.get((int) i)
 									.toString()));
 						} catch (FileNotFoundException e) {
 							e.printStackTrace();
